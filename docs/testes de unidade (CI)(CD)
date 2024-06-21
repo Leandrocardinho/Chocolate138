@@ -1,0 +1,34 @@
+DDT- Data Driven Testing -Executar multiplos testes variando seus valores
+
+TDD - Primeiro se completam os testes depois a programação.
+
+Normalmente os testes de unidade são criados após a programação
+
+Existe uma forma de organização do trabalho que inverte isso. Primeiro se completam os testes e depois a programação
+**TDD
+1 -  Em uma Sprint, na manhã da 1° segunda -feira, nós conversamos sobre o que será contruido.
+De tarde, o PO e o QA se reunem para definir os critérios de aceite (dado-Quando-Então)
+Enquanto isso, os devs montam o esqueleto do código, voltando um resultado fixo.
+
+Exemplo:
+
+N reunião, ficou definido que nesta Sprint nos contruimos 4 funções de cálculo de áreas.
+- public double calcularQuadrado(double lado){ retunn 0; }
+- public double calcularRetangulo( double largura, double comprimento){ retunn 0; }
+- public double calcularTriangulo(double largura, double comprimento){ retunn 0; }
+- public double calcularCirculo(double raio){ retunn 0; }
+
+Nos dias seguintes, conforme os devs completem o codigo, os testes vão comecar a passar.
+
+No TDD, quando executamos a bateria de testes?
+R- Uma vez por dia ou quando há uma nova build (mudança no codigo)
+
+Esse processo pode evoluir para um processo de INtegração continua (CI)
+
+DEVS            Passou                       Passou
+Ambiente -------> Realse---------Ambiente --------->Ambiente
+Desenvolvimento                   Testes            Produção
+
+            Integraçaõ Continua
+                    Entrega Contimua(CD)---> Esteira/ Pipeline
+
