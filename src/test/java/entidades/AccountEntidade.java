@@ -6,4 +6,5 @@ public class AccountEntidade { //representa o usuário no sistema
 
     public String password;     //senha
 
+    public String token;
 }
