@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Order;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.ITestContext; //inteface do testNG para compartilhar variaveis
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -17,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 public class Account {
     // 3.1 - Atributos
     String userId; // Criado aqui regra que vale para toda classe, userId tratado no testCreateUser
-    String token; // guardar token para autenticação do user
+    static String token; // guardar token para autenticação do user
     String ct = "application/json"; //contentType da API
     String uri = "https://bookstore.toolsqa.com/Account/v1/";
     Response response; // guarda o retorno da api linha 50
@@ -33,7 +34,7 @@ public class Account {
     @Test(priority = 1)
     public void testCreateUser() {
         // Configura - Arrange
-        account.userName = "Maizon1";
+        account.userName = "Cachorroloko1";
         account.password = "P@ssw0r1"; //entrada
 
 
@@ -67,11 +68,8 @@ public class Account {
     }
 
     @Test(priority = 2)
-    public void testGererateToken() {
+    public void testGererateToken(ITestContext context) { //declarar a interface de contexto
         //Configura
-
-
-
         String jsonBody = gson.toJson(account); // transforma em Json o que tem no account criado acima
 
         // Dado- Given  Quando-when Então-Then
@@ -79,17 +77,18 @@ public class Account {
                 .contentType(ct)
                 .log().all()
                 .body(jsonBody)
-                .when()
+        .when()
                 .post(uri + "GenerateToken")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .body("status", is("Success")) // valida o que status que está voltando da api
                 .body("result", is("User authorized successfully.")) // valida o resultado
                 .extract() // guarda o token para no response linha 72 e 86
-                ;
+        ;
         //Extraçao do token
         token = resposta.jsonPath().getString("token");
+        context.setAttribute("token", token);
 
 
         //Valida
@@ -112,9 +111,9 @@ public class Account {
                 .contentType(ct)
                 .log().all()
                 .body(jsonBody)
-                .when()
+        .when()
                 .post(uri + "Authorized")
-                .then()
+        .then()
                 .log().all()
                 .statusCode(200)
                 .body(is("true"))
@@ -169,7 +168,7 @@ public class Account {
 
         ;
     }
-    @Test(priority = 6)
+    @Test(priority = 20)
     public void testDeletarUser(){
         //configura-Arrange  Executa-  Valida-Act
         //Dados de entradavem do metodo de teste de criacao do usario (userId)
@@ -186,8 +185,8 @@ public class Account {
         .then() //Então
                 .log().all()
                 .statusCode(204)
-                //.body("code", is(0))
-                //.body("message", is("string"))
+
+
         ;
     }
 
