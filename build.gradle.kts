@@ -23,6 +23,14 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.slf4j:slf4j-api:1.7.33")
 
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    implementation("org.seleniumhq.selenium:selenium-java:4.10.0")
+
+    dependencies {
+        implementation("io.github.bonigarcia:webdrivermanager:5.6.0") // Ou a versão mais recente
+    }
+
+
 }
 
 tasks.test {
