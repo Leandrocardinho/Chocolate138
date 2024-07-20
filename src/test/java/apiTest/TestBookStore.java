@@ -29,7 +29,9 @@ public class TestBookStore {
 
      //@AfterMethod //Depois de cada @Test
      @AfterClass // Depois de cada Classe
-    public void tearDown(){
+    public void tearDown() throws InterruptedException {
+         Thread.sleep(3000); //Vai dar uma pausa de 30 segundospara depois deletar usuaurio
+
         account.testDeletarUser(); //excluir usuario
 
     }
@@ -84,32 +86,54 @@ public class TestBookStore {
          ;
      }
      @Test(priority = 3)
-     public void testUpdateLoan(ITestContext context){ // Atualizar quem está com qual livro
-        // Configura
+     public void testUpdateLoan(ITestContext context) { // Atualizar quem está com qual livro
+         // Configura
          // Dados de entrada
          //userId é extraido no BeforeMethod
          String isbnAntigo = "9781449325862"; //Livro a trocar
          String isbnNovo = "9781449331818"; // novo livro
 
          //alimentar a classe LoanEntity apenas com o código do usuário e o isbn
-         isbn = new LoanEntity(); // reiniciando o Obj da classe LoanEntity (reset)
+         isbn = new LoanEntity();
          isbn.userId = context.getAttribute("userID").toString();
-        isbn.isbn = isbnNovo; //código do livro que estava com o usuário
+         isbn.isbn = isbnNovo; //código do livro que estava com o usuário
 
          //Executa
          given()
                  .log().all()
                  .contentType(ct)
-                 .header("Authorization", "Bearer " + context.getAttribute("token") )
+                 .header("Authorization", "Bearer " + context.getAttribute("token"))
                  .body(gson.toJson(isbn)) //isbn vai mandar o que está na linha isbn.isbn livro novo
          .when()
                  .put(uriBooks + "Books/" + isbnAntigo)
-         //Valida
+                 //Valida
          .then()
                  .log().all()
                  .statusCode(200)
-                 .body("books[0].isbn",is(isbnNovo))
-        ;
+                 .body("books[0].isbn", is(isbnNovo))
+         ;
+     }
+        @Test(priority = 4)
+         public void testDeleteLoans(ITestContext context){
+             //Configura
+         //userId vem do BeforClass
+         //statuscode = 204
+
+         //Executa
+         given()
+                 .log().all()
+                 .contentType(ct)
+                 .header("Authorization", "Bearer " + context.getAttribute("token"))
+
+         .when()
+                 .delete("https://bookstore.toolsqa.com/BookStore/v1/Books?UserId=" + context.getAttribute("userID"))
+         // Valida
+         .then()
+                 .log().all()
+                 .statusCode(204)
+         ;
+
+         }
      }
 
-}
+
